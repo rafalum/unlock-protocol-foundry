@@ -1,28 +1,24 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.17;
 
-import {Test, console2} from "forge-std/Test.sol";
-import {Vm} from "forge-std/Vm.sol";
+import { Test } from "forge-std/Test.sol";
 
-import {ERC1967Proxy} from "../lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import { ERC1967Proxy } from "../lib/openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 
-import {IUnlock} from "../lib/unlock/smart-contracts/contracts/interfaces/IUnlock.sol";
-import {IPublicLock} from "../lib/unlock/smart-contracts/contracts/interfaces/IPublicLock.sol";
+import { IUnlock } from "../lib/unlock/smart-contracts/contracts/interfaces/IUnlock.sol";
+import { IPublicLock } from "../lib/unlock/smart-contracts/contracts/interfaces/IPublicLock.sol";
 
-import {Unlock} from "../lib/unlock/smart-contracts/contracts/Unlock.sol";
-import {PublicLock} from "../lib/unlock/smart-contracts/contracts/PublicLock.sol";
+import { Unlock } from "../lib/unlock/smart-contracts/contracts/Unlock.sol";
+import { PublicLock } from "../lib/unlock/smart-contracts/contracts/PublicLock.sol";
 
-import {LockFactory} from "../src/LockFactory.sol";
-
+import { LockFactory } from "../src/LockFactory.sol";
 
 contract LockFactoryTest is Test {
-
     IPublicLock lock;
 
     event DebugEvent(string message, address addr);
 
     function setUp() public {
-        
         // create the unlock contract which serves as a factory for locks
         address unlock = address(new Unlock());
         emit DebugEvent("Unlock address", unlock);
@@ -44,13 +40,11 @@ contract LockFactoryTest is Test {
         LockFactory factory = new LockFactory(IUnlock(proxy));
 
         lock = IPublicLock(factory.lockAddress());
-
     }
-    
-    function testPurchaseKey() public {
 
+    function testPurchaseKey() public {
         address randomAddress = address(1337);
-        
+
         vm.deal(randomAddress, 1 ether);
         vm.prank(randomAddress);
 
@@ -73,13 +67,9 @@ contract LockFactoryTest is Test {
         bytes[] memory _data = new bytes[](1);
         _data[0] = bytes("0x");
 
-        lock.purchase{value: 0.011 ether}(_values, _recipients, _referrers, _keyManagers, _data);
+        lock.purchase{ value: 0.011 ether }(_values, _recipients, _referrers, _keyManagers, _data);
 
         uint256 balanceAfterPurchase = lock.balanceOf(randomAddress);
         assertEq(balanceAfterPurchase, 1);
-            
-            
     }
-
-
 }
