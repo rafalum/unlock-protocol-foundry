@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
 import { IUnlock } from "../lib/unlock/smart-contracts/contracts/interfaces/IUnlock.sol";
-import { IPublicLock } from "../lib/unlock/smart-contracts/contracts/interfaces/IPublicLock.sol";
 
 pragma solidity ^0.8.17;
 
